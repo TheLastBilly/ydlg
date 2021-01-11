@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Wol Control System - Login</title>
+</head>
+<body>
+    <form method="POST" action="/login">
+        <div class="login_box">
+            <h3>Login</h3>
+            <div class="inputs">
+                <p><input type="text" class="entry" name="username" placeholder="Username"></p>
+                <p><input type="password" class="entry" name="password" placeholder="Password"></p>
+                <p><button>Login</button></p>
+                <p class="remember"> <input type="checkbox" name="remember"> Remember Me </p>
+                {% if message %}
+                <p class="message"> {{ message }} </p>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</body> 
+</html>

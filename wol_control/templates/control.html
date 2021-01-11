@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Wol Control System</title>
+</head>
+<body>
+    <div  class="controls">
+        {% if redirect_home %}
+        <script>
+            var timer = setTimeout(function() {
+                window.location='{{ url_for("main.index") }}'
+            }, 5000);
+        </script>
+        {% endif %}
+        {% for control in controls %}
+        <h3>{{ control.name }}</h3>
+        <p>
+            <form method="GET" action="/control/{{control.public_id}}/on">
+                <button>Turn On</button>
+            </form>
+        </p>
+        <p>
+            <form method="GET" action="/control/{{control.public_id}}/off">
+                <button>Turn Off</button>
+            </form>
+        </p>
+        {% if message %}
+            <p class="message"> {{ message }} </p>
+        {% endif %}
+        {% endfor %}
+        <a href="{{ url_for('auth.logout') }}" class="logout_button">Log Out</a>
+    </div>
+</body> 
+</html>
