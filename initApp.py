@@ -1,6 +1,7 @@
 from ydlg import *
 from ydlg.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
+import uuid
 import os
 
 admin_user = ""
@@ -19,6 +20,10 @@ except Exception as e:
 if admin_password == "":
     admin_password = "admin"
 
+secret_key = uuid.uuid4().hex
+with open("/tmp/flask.key", "w") as fp:
+    fp.write(secret_key)
+    
 app = create_app()
 
 with app.app_context():

@@ -6,8 +6,11 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = "c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2"
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+
+    with open("/tmp/flask.key", "r") as fp:
+        app.config['SECRET_KEY'] = fp.readline()
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../db.sqlite3'
 
     db.init_app(app)
 
