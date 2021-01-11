@@ -1,16 +1,24 @@
-FROM python:3.7-buster
+FROM alpine:latest
 
 LABEL maintaienr="Jose Ricardo <jtmonegro@gmail.com>"
 
-RUN apt update -y && apt install nginx -y
-RUN pip install uwsgi
+RUN apk add --no-cahce python3 py3-pip
+RUN rm -rf /tmp/* /var/cache/apk/* /var/tmp/*
 
-COPY . ./app
-WORKDIR ./app
+RUN mkdir /app
+COPY ../ydlg /app/
+COPY ../initApp.py /app/
+COPY ../requirements.txt /app/
+
+WORKDIR /app
 
 RUN pip install -r requirements.txt
-RUN python init_db.py
 
-COPY ./ydlg.nginx /etc/nginx/sites-enabled/default
+COPY ./default.conf /etc/nginx/sites-enabled/default.conf
+COPY ./entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
-CMD gunicorn --workers 3 --access-logfile ydlg.log --bind unix:/tmp/ydlg.sock -m 007 wsgi -u www-data -g www-data
+RUN mkdir /downloads/
+RUN mkdir /logs/
+
+CMD ./entrypoint.sh

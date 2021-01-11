@@ -14,7 +14,7 @@ def login():
 def login_post():
     username = request.form.get("username")
     password = request.form.get("password")
-    remember = True if request.form.get("remember") else False
+    remember = True if request.form.get("remember") == "remember" else False
 
     if not username or not password:
         return render_template('login.html', message="Please enter valid credentials")

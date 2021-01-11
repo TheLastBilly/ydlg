@@ -12,11 +12,12 @@
         <form method="POST" action="/download">
             <div class="youtube_link_box">
                 <h3>YDLG</h3>
-                <p><input type="text" name="URL" placeholder="https://www.youtube.com/"></p>
+                <p><input class="text_input" type="text" name="URL" placeholder="https://www.youtube.com/"></p>
                 <p><button>Download</button></p>
                 {% if message %}
                 <p class="message"> {{ message }} </p>
                 {% endif %}
+                <a href="{{ url_for('auth.logout') }}" class="logout_button">Log Out</a>
             </div>
         </form>
     </div>

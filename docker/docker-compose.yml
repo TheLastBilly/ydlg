@@ -1,0 +1,11 @@
+version: '2'
+
+services: 
+    ydlg:
+        image: thelastbilly/ydlg
+        build: .
+        ports:
+            - "9400:80"
+        volumes:
+            - "./logs:/logs"
+            - "./Downloads:/downloads"
