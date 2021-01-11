@@ -37,7 +37,7 @@
     box-shadow: 0 5px #999
 }
 
-.contorls {
+.youtube_link {
     position: absolute;
     top: 40%;
     left: 50%;
@@ -46,7 +46,7 @@
     display: inline-block;
 }
 
-.controls h3 {
+.youtube_link h3 {
     color: rgb(56, 56, 56);
     text-align: center;
     font-size: 60px;
@@ -54,7 +54,7 @@
     background: transparent;
 }
 
-.controls button {
+.youtube_link button {
     font-size: 20px;
     display: flex;
     overflow: hidden;
@@ -90,7 +90,7 @@
     background: transparent;
 }
 
-.entry{
+.youtube_link_box input{
     font-size: 20px;
     display: flex;
     overflow: hidden;
