@@ -25,7 +25,7 @@ Before setting up Wol Control you'll need the following dependencies to use it:
 First, you'd need to clone this repository on the server where you'd like to install it. You can do so by using the following command:
 
 ```
-git clone https://github.com/TheLastBilly/wol_control
+git clone https://github.com/TheLastBilly/ydlg
 ```
 
 ### Using the setup.sh script 
@@ -46,12 +46,12 @@ Next you'll have to create a python virtual enviroment and install all the neces
 ***Make sure to move to the repository's directory first.***
 
 ```
-python3 -m virtualenv ~/.wol_control_env
+python3 -m virtualenv ~/.ydlg_env
 ```
-**This command will create a virtual enviroment on your home directory (`~/`) named `wol_control_env`. The `.` is used to make this a hidden folder so you wouldn't normaly see it unless you actively look for it. Regardless, you can name it however you want.**
+**This command will create a virtual enviroment on your home directory (`~/`) named `ydlg_env`. The `.` is used to make this a hidden folder so you wouldn't normaly see it unless you actively look for it. Regardless, you can name it however you want.**
 
 ```
-source ~/.wol_control_env/bin/activate
+source ~/.ydlg_env/bin/activate
 python3 -m pip install -r requirements.txt
 ```
 **The first command will active your virtual enviroment and the second one will install all of the dependencies listed on the requirements.txt file.**
@@ -70,13 +70,13 @@ Create a new user and add some devices using the **manage_users.py** and **manag
 python3 manage_users.py
 python3 manage_devices.py
 ```
-And finally, go to the **wol_control/main.py** file and set the `remote_user` variable to the username that you'll use to shutdown remote computers with over SSH (more on that later).
+And finally, go to the **ydlg/main.py** file and set the `remote_user` variable to the username that you'll use to shutdown remote computers with over SSH (more on that later).
 
 ## Nginx setup
 
 Wol Control uses `nginx` to handle remote resquests from its clients. Assuming you already setup `nginx`, you'll then have to create a settings file so Wol Control can be accessed by it.
 
-There's a file inluded in this repository, **wol_control.nginx**, which you can use as a template for that:
+There's a file inluded in this repository, **ydlg.nginx**, which you can use as a template for that:
 
 ```
 server {
@@ -86,18 +86,18 @@ server {
                 proxy_set_header   X-Real-IP $remote_addr;
                 proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
                 proxy_set_header   X-Forwarded-Host $server_name;
-		proxy_pass http://unix:/home/sammy/wol_control/wol_control.sock:/;
+		proxy_pass http://unix:/home/sammy/ydlg/ydlg.sock:/;
 	}
 }
 ```
 
-Just replace the path in between `proxy_pass http://unix:` and `/wol_control.sock:/` with the local path of this repository in your computer. Also, make sure to change the address that `nginx` will be listening to in the `listen` line at the beggining of the file from `localhost` to your machine's hostname/ip.
+Just replace the path in between `proxy_pass http://unix:` and `/ydlg.sock:/` with the local path of this repository in your computer. Also, make sure to change the address that `nginx` will be listening to in the `listen` line at the beggining of the file from `localhost` to your machine's hostname/ip.
 
-Now you can copy the **wol_control.nginx** file into your nginx `/etc/nginx/sites-available/` folder and enable it.
+Now you can copy the **ydlg.nginx** file into your nginx `/etc/nginx/sites-available/` folder and enable it.
 
 ```
-sudo cp ./wol_control.nginx /etc/nginx/sites-available/wol_control.nginx
-sudo ln -s /etc/nginx/sites-available/wol_control.nginx /etc/nginx/sites-enabled/wol_control.nginx
+sudo cp ./ydlg.nginx /etc/nginx/sites-available/ydlg.nginx
+sudo ln -s /etc/nginx/sites-available/ydlg.nginx /etc/nginx/sites-enabled/ydlg.nginx
 ```
 
 Finally, we can check our `nginx` configuration file with the following command:
@@ -113,37 +113,37 @@ sudo systemctl restart nginx
 
 ## Systemd setup
 
-You'll have to setup a service file for Wol Control. There's already one provided with this repository **wol_control.service**, so you can use it as a template.
+You'll have to setup a service file for Wol Control. There's already one provided with this repository **ydlg.service**, so you can use it as a template.
 
 ```
 [Unit]
-Description=Gunicorn service of wol_control
+Description=Gunicorn service of ydlg
 After=network.target
 
 [Service]
 User=sammy
 Group=www-data
-WorkingDirectory=/home/sammy/wol_control
-Environment="PATH=/home/sammy/.wol_control_env/bin:/usr/bin"
-ExecStart=/home/sammy/.wol_control_env/bin/gunicorn --workers 3 --access-logfile wol_control.log --bind unix:wol_control.sock -m 007 wsgi
+WorkingDirectory=/home/sammy/ydlg
+Environment="PATH=/home/sammy/.ydlg_env/bin:/usr/bin"
+ExecStart=/home/sammy/.ydlg_env/bin/gunicorn --workers 3 --access-logfile ydlg.log --bind unix:ydlg.sock -m 007 wsgi
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-This file assumes that you installed a virtual enviroment on `~/.wol_control_env`, so make sure you change that path with whatever directory you used on that step, or remove the use of a virtual enviroment  from the file altogether. If you do remove any mentions of a virtual enviroment, your service file should end up looking like this:
+This file assumes that you installed a virtual enviroment on `~/.ydlg_env`, so make sure you change that path with whatever directory you used on that step, or remove the use of a virtual enviroment  from the file altogether. If you do remove any mentions of a virtual enviroment, your service file should end up looking like this:
 
 ```
 [Unit]
-Description=Gunicorn service of wol_control
+Description=Gunicorn service of ydlg
 After=network.target
 
 [Service]
 User=sammy
 Group=www-data
-WorkingDirectory=/home/sammy/wol_control
+WorkingDirectory=/home/sammy/ydlg
 Environment="/usr/bin:/usr/local/bin"
-ExecStart=/usr/bin/python3 -m gunicorn --workers 3 --access-logfile wol_control.log --bind unix:wol_control.sock -m 007 wsgi
+ExecStart=/usr/bin/python3 -m gunicorn --workers 3 --access-logfile ydlg.log --bind unix:ydlg.sock -m 007 wsgi
 
 [Install]
 WantedBy=multi-user.target
@@ -151,18 +151,18 @@ WantedBy=multi-user.target
 
 Just like with the `nginx` setup step, replace the path specified after the `WorkingDirectory` variable with the path where you clonned this repository into. Also make sure to replace the `sammy` user in the `User` variable with username of the user that has access to this repository.
 
-Then, copy the **wol_control.service** file to the `/etc/systemd/system` folder and reload the `systemd` daemon.
+Then, copy the **ydlg.service** file to the `/etc/systemd/system` folder and reload the `systemd` daemon.
 
 ```
-sudo cp ./wol_control.service /etc/systemd/system/wol_control.service
+sudo cp ./ydlg.service /etc/systemd/system/ydlg.service
 sudo systemctl daemon-reload
 ```
 
-And finally, start the `wol_control` service and enable.
+And finally, start the `ydlg` service and enable.
 
 ```
-sudo systemctl start wol_control
-sudo systemctl enable wol_control
+sudo systemctl start ydlg
+sudo systemctl enable ydlg
 ```
 
 ## And that's it!
@@ -206,7 +206,7 @@ In orther to properly setup a device, you'll need to enable `Wake On Lan` on it 
 
 Assuming the machine where Wol Control is running is Machine A and the one that you'd like to shut down remotely is Machine B, follow these steps:
 
-First, create an user on Machine B with the same username that you used on the `remote_user` variable from the **wol_control/main.py** file back at the **Wol Control setup** step.
+First, create an user on Machine B with the same username that you used on the `remote_user` variable from the **ydlg/main.py** file back at the **Wol Control setup** step.
 
 Then, add the SSH key from the user running Wol Control on Machine A into the newly created user on Machine B:
 
@@ -218,10 +218,10 @@ ssh-copy-id [Machine B's user]@[Machine B's IP]
 ```
 **Make sure to log into Machine B from Machine A at least once, otherwise the `Turn Off` feature might not work. You can do that by using the following command: ```ssh [Machine B's user]@[Machine B's IP]``` on Machine A.**
 
-Lastly, create a folder named `.wol_control/` on Machine B's user's home directory and then create a file named **~/.wol_control/remote_shutdown.sh**. Here you'll add the command that will shutdown Machine B whenever you click the `Turn Off` button on Wol Control's interface. I personally just use `poweroff` but this may not work depending on your system:
+Lastly, create a folder named `.ydlg/` on Machine B's user's home directory and then create a file named **~/.ydlg/remote_shutdown.sh**. Here you'll add the command that will shutdown Machine B whenever you click the `Turn Off` button on Wol Control's interface. I personally just use `poweroff` but this may not work depending on your system:
 
 **On Machine B**
 ```
-mkdir ~/.wol_control
-echo "poweroff" > ~/.wol_control/remote_shutdown.sh
+mkdir ~/.ydlg
+echo "poweroff" > ~/.ydlg/remote_shutdown.sh
 ```

@@ -1,12 +1,21 @@
 from ydlg import *
-from wol_control.models import User
+from ydlg.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
-admin_user = os.environ("YDLG_USERNAME")
+admin_user = ""
+try:
+    admin_user = os.environ["YDLG_USERNAME"]
+except Exception as e:
+    pass
 if admin_user == "":
     admin_user = "admin"
-admin_password = os.environ("YDLG_PASSWORD")
+
+admin_password = ""
+try:
+    admin_password = os.environ["YDLG_PASSWORD"]
+except Exception as e:
+    pass
 if admin_password == "":
     admin_password = "admin"
 

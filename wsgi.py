@@ -1,4 +1,4 @@
-from wol_control import create_app
+from ydlg import create_app
 
 application = create_app()
 

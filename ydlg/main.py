@@ -6,7 +6,12 @@ import youtube_dl
 
 main = Blueprint('main', __name__)
 
-default_download_directory = os.environ("YDLG_DOWNLOAD_FOLDER")
+default_download_directory = ""
+
+try:
+    default_download_directory = os.environ["YDLG_DOWNLOAD_FOLDER"]
+except Exception as e:
+    pass
 if default_download_directory == "":
     default_download_directory = "./Downloads"
 

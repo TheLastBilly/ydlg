@@ -1,12 +1,12 @@
 [Unit]
-Description=Gunicorn service of wol_control
+Description=Gunicorn service of ydlg
 After=network.target
 
 [Service]
 User=root
 Group=www-data
 WorkingDirectory=/app
-ExecStart=/usr/local/bin/gunicorn --workers 3 --access-logfile wol_control.log --bind unix:/tmp/wol_control.sock -m 007 wsgi
+ExecStart=/usr/local/bin/gunicorn --workers 3 --access-logfile ydlg.log --bind unix:/tmp/ydlg.sock -m 007 wsgi
 
 [Install]
 WantedBy=multi-user.target

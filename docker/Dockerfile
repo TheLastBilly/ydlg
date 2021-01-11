@@ -11,6 +11,6 @@ WORKDIR ./app
 RUN pip install -r requirements.txt
 RUN python init_db.py
 
-COPY ./wol_control.nginx /etc/nginx/sites-enabled/default
+COPY ./ydlg.nginx /etc/nginx/sites-enabled/default
 
-CMD gunicorn --workers 3 --access-logfile wol_control.log --bind unix:/tmp/wol_control.sock -m 007 wsgi -u www-data -g www-data
+CMD gunicorn --workers 3 --access-logfile ydlg.log --bind unix:/tmp/ydlg.sock -m 007 wsgi -u www-data -g www-data
