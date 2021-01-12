@@ -1,0 +1,2 @@
+- Add chown for downloads to nginx
+- Add PID and GID for image

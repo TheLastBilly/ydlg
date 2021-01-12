@@ -3,9 +3,13 @@ version: '2'
 services: 
     ydlg:
         image: thelastbilly/ydlg
-        build: .
+        build: 
+            context: ../
+            dockerfile: docker/Dockerfile
         ports:
             - "9400:80"
         volumes:
             - "./logs:/logs"
             - "./Downloads:/downloads"
+        env_file: 
+            - "./variables.env"

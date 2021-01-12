@@ -5,3 +5,4 @@ flask_limiter
 requests
 urllib3
 gunicorn
+youtube_dl

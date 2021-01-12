@@ -1,6 +1,6 @@
 #!/bin/sh
 
-python initApp.py
+python3 initApp.py
 
-nginx
-gunicorn --workers 3 --access-logfile /logs/gunicorn.log --bind unix:/tmp/ydlg.sock -m 007 wsgi -u www-data -g www-data
+nginx -g 'daemon off;' &
+gunicorn --workers 3 --access-logfile /logs/gunicorn.log --bind unix:/tmp/ydlg.sock -m 007 wsgi -u nginx

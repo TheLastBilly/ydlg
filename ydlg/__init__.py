@@ -11,6 +11,7 @@ def create_app():
         app.config['SECRET_KEY'] = fp.readline()
     
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../db.sqlite3'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
 
@@ -32,4 +33,4 @@ def create_app():
     return app
 if __name__ == "__main__":
     app = create_app()
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='http://0.0.0.0', debug=False)
