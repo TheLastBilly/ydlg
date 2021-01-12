@@ -2,7 +2,15 @@ FROM alpine:latest
 
 LABEL maintaienr="Jose Ricardo <jtmonegro@gmail.com>"
 
-RUN apk add --no-cache python3 py3-pip nginx
+ENV YDLG_DOWNLOAD_FOLDER="/downloads"
+
+ENV YDLG_USERNAME="admin"
+ENV YDLG_PASSWORD="admin"
+
+ENV PUID="1001"
+ENV PGID="1001"
+
+RUN apk add --no-cache python3 py3-pip nginx shadow
 RUN rm -rf /tmp/* /var/cache/apk/* /var/tmp/*
 
 RUN mkdir /app
@@ -15,7 +23,7 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt
 
-COPY ./docker/default.conf /etc/nginx/conf.d/default.conf
+COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 COPY ./docker/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
