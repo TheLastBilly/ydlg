@@ -21,8 +21,9 @@ if admin_password == "":
     admin_password = "admin"
 
 secret_key = uuid.uuid4().hex
-with open("/tmp/flask.key", "w") as fp:
-    fp.write(secret_key)
+if not os.path.exists("/tmp/flask.key"):
+    with open("/tmp/flask.key", "a") as fp:
+        fp.write(secret_key)
     
 app = create_app()
 
